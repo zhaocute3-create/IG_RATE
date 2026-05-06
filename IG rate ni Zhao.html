@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IG RATE NI ZHAO</title>
-<p>DROP IG BILIS</p>
-<p class="creator-text">Created by ZHAO</p>
 
 <style>
 body{
@@ -26,11 +25,12 @@ h1{
 }
 
 .card{
-  margin:20px;
+  margin:20px auto;
   padding:20px;
   border-radius:20px;
   box-shadow:0 0 25px #00ffcc33;
   backdrop-filter: blur(10px);
+  max-width:400px;
 }
 
 input{
@@ -68,21 +68,29 @@ button:hover{
   from{opacity:0; transform:translateY(20px);}
   to{opacity:1; transform:translateY(0);}
 }
+
+.creator-text{
+  font-size:12px;
+  opacity:0.6;
+}
 </style>
 </head>
 
 <body>
 
 <h1>IG RATE NI ZHAO</h1>
+<p>DROP IG BILIS</p>
+<p class="creator-text">Created by ZHAO</p>
 
 <div class="card">
-<input id="followers" placeholder="Followers">
-<input id="following" placeholder="Following">
-<input id="posts" placeholder="Posts">
+  <input id="followers" type="number" placeholder="Followers">
+  <input id="following" type="number" placeholder="Following">
+  <input id="posts" type="number" placeholder="Posts">
 
-<button onclick="analyze()">RATE</button>
+  <br>
+  <button onclick="analyze()">RATE</button>
 
-<div class="result" id="result"></div>
+  <div class="result" id="result"></div>
 </div>
 
 <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
@@ -95,9 +103,9 @@ function playSound(){
 function analyze(){
   playSound();
 
-  let f = Number(followers.value);
-  let g = Number(following.value);
-  let p = Number(posts.value);
+  let f = Number(document.getElementById("followers").value);
+  let g = Number(document.getElementById("following").value);
+  let p = Number(document.getElementById("posts").value);
 
   if(!f || !g || !p){
     return alert("Fill all fields!");
@@ -106,7 +114,6 @@ function analyze(){
   let ratio = f / g / p;
   let score = 0;
 
-  // scoring
   if(ratio >= 2) score += 4;
   else if(ratio >= 1) score += 2.5;
   else score += 1;
@@ -118,51 +125,49 @@ function analyze(){
   if(f >= 1000) score += 3;
   else score += 1;
 
-  // fake detector
   let fakeRisk = "LOW";
   let fakeMsg = "";
 
   if(ratio < 0.5){
     fakeRisk = "HIGH";
-    fakeMsg = " This account follows too many compared to followers, often seen in spam or growth tactics.";
+    fakeMsg = "This account follows too many compared to followers, often seen in spam or growth tactics.";
   }
   else if(f > 5000 && p < 10){
     fakeRisk = "MEDIUM";
-    fakeMsg = " High followers but very low posts. Could be inactive or boosted growth.";
+    fakeMsg = "High followers but very low posts. Could be inactive or boosted growth.";
   }
   else{
-    fakeMsg = " Behavior looks organic and natural.";
+    fakeMsg = "Behavior looks organic and natural.";
   }
 
-  // AI-style explanation
   let explanation = "";
 
   if(score >= 8){
-    explanation = "This profile shows strong authority and healthy growth. The follower-to-following ratio indicates influence rather than dependency, and consistent posting strengthens trust. Overall, this looks like a well-managed account with real audience potential.";
+    explanation = "This profile shows strong authority and healthy growth. The follower-to-following ratio indicates influence rather than dependency, and consistent posting strengthens trust.";
   }
   else if(score >= 6){
-    explanation = "This account is performing fairly well with a decent balance between followers and activity. With a bit more consistency or audience growth, it can become significantly stronger.";
+    explanation = "This account is performing fairly well with a decent balance between followers and activity.";
   }
   else if(score >= 4){
-    explanation = "The account shows average performance. There may be inconsistencies in growth or activity. Improving posting frequency and audience engagement could help.";
+    explanation = "The account shows average performance. Improving posting frequency could help.";
   }
   else{
-    explanation = "This account appears weak in terms of growth and activity. The low ratio or limited content suggests it may not be actively developed or lacks audience trust.";
+    explanation = "This account appears weak in growth and activity.";
   }
 
-  let level = score >=8 ? " EXCELLENT" :
-              score >=6 ? " GOOD" :
-              score >=4 ? " AVERAGE" :
-              " WEAK";
+  let level = score >=8 ? "EXCELLENT" :
+              score >=6 ? "GOOD" :
+              score >=4 ? "AVERAGE" :
+              "WEAK";
 
-  result.innerHTML = `
+  document.getElementById("result").innerHTML = `
     <b>Score:</b> ${score}/10<br>
     <b>Rating:</b> ${level}<br><br>
 
-     <b>Explanation:</b><br>
+    <b>Explanation:</b><br>
     ${explanation}<br><br>
 
-     <b>Risk:</b> ${fakeRisk}<br>
+    <b>Risk:</b> ${fakeRisk}<br>
     ${fakeMsg}
   `;
 }

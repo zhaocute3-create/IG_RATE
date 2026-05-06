@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IG RATE NI ZHAO</title>
+
+<style>
+body{
+  background: radial-gradient(circle at top,#0b1220,#000);
+  color:#00ffcc;
+  font-family:sans-serif;
+  text-align:center;
+  overflow-x:hidden;
+}
+
+h1{
+  text-shadow:0 0 20px #00ffcc;
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 10px #00ffcc;}
+  to{ text-shadow:0 0 30px #00ffcc;}
+}
+
+.card{
+  margin:20px auto;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 0 25px #00ffcc33;
+  backdrop-filter: blur(10px);
+  max-width:400px;
+}
+
+input{
+  width:80%;
+  padding:12px;
+  margin:10px;
+  border-radius:10px;
+  border:1px solid #00ffcc;
+  background:#0b1220;
+  color:#00ffcc;
+}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:10px;
+  background:#00ffcc;
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 15px #00ffcc;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.1);
+}
+
+.result{
+  margin-top:20px;
+  font-size:18px;
+  animation:fade 0.5s ease-in;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.creator-text{
+  font-size:12px;
+  opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<h1>IG RATE NI ZHAO</h1>
+<p>DROP IG BILIS</p>
+<p class="creator-text">Created by ZHAO</p>
+
+<div class="card">
+  <input id="followers" type="number" placeholder="Followers">
+  <input id="following" type="number" placeholder="Following">
+  <input id="posts" type="number" placeholder="Posts">
+
+  <br>
+  <button onclick="analyze()">RATE</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
+
+<script>
+function playSound(){
+  document.getElementById("clickSound").play();
+}
+
+function analyze(){
+  playSound();
+
+  let f = Number(document.getElementById("followers").value);
+  let g = Number(document.getElementById("following").value);
+  let p = Number(document.getElementById("posts").value);
+
+  if(!f || !g || !p){
+    return alert("Fill all fields!");
+  }
+
+  let ratio = f / g / p;
+  let score = 0;
+
+  if(ratio >= 2) score += 4;
+  else if(ratio >= 1) score += 2.5;
+  else score += 1;
+
+  if(p >= 50) score += 3;
+  else if(p >= 10) score += 2;
+  else score += 1;
+
+  if(f >= 1000) score += 3;
+  else score += 1;
+
+  let fakeRisk = "LOW";
+  let fakeMsg = "";
+
+  if(ratio < 0.5){
+    fakeRisk = "HIGH";
+    fakeMsg = "This account follows too many compared to followers, often seen in spam or growth tactics.";
+  }
+  else if(f > 5000 && p < 10){
+    fakeRisk = "MEDIUM";
+    fakeMsg = "High followers but very low posts. Could be inactive or boosted growth.";
+  }
+  else{
+    fakeMsg = "Behavior looks organic and natural.";
+  }
+
+  let explanation = "";
+
+  if(score >= 8){
+    explanation = "This profile shows strong authority and healthy growth. The follower-to-following ratio indicates influence rather than dependency, and consistent posting strengthens trust.";
+  }
+  else if(score >= 6){
+    explanation = "This account is performing fairly well with a decent balance between followers and activity.";
+  }
+  else if(score >= 4){
+    explanation = "The account shows average performance. Improving posting frequency could help.";
+  }
+  else{
+    explanation = "This account appears weak in growth and activity.";
+  }
+
+  let level = score >=8 ? "EXCELLENT" :
+              score >=6 ? "GOOD" :
+              score >=4 ? "AVERAGE" :
+              "WEAK";
+
+  document.getElementById("result").innerHTML = `
+    <b>Score:</b> ${score}/10<br>
+    <b>Rating:</b> ${level}<br><br>
+
+    <b>Explanation:</b><br>
+    ${explanation}<br><br>
+
+    <b>Risk:</b> ${fakeRisk}<br>
+    ${fakeMsg}
+  `;
+}
+</script>
+
+</body>
+</html>
